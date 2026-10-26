@@ -12,3 +12,6 @@
 - [x] Phase 3 – uBlock Origin im Zweig geckoview installieren und anbinden, main unverändert lassen
 - [x] Phase-3-Tests und Android-Build prüfen (Commit 7ec107c, Lauf 40391330066; 14 JVM- und 6 Filtertests bestanden)
 - [ ] Phase 3 am Android-Gerät prüfen – wartet auf Nutzer: Laufzeitinstallation, Popup, Dashboard, private Filterwirkung und Updates; Engine 139 weiterhin nicht veröffentlichen
+- [ ] Phase 4 – Desktop-Ansicht, Seitensuche, Gecko-DNS, Logins, Seitenrechte, Lesemodus, Übersetzung und PDF im Zweig geckoview bearbeiten
+- [ ] Phase-4-Tests und Android-Build prüfen; main unverändert bestätigen
+- [ ] Phase 4 auf Android-Gerät prüfen – wartet auf Gerätetests des Nutzers
