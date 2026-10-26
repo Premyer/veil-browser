@@ -33,7 +33,7 @@ export default function BrowserWorkspace() {
   const active = data?.tabs.find(t => t.id === activeId) || data?.tabs[0];
   useEffect(() => { let restored: BrowserData; try { const stored = localStorage.getItem('veil-workspace-v1'); restored = stored ? parseImport(JSON.parse(stored)) : initialData(); } catch { restored = initialData(); } setData(restored); setActiveId(restored.tabs[0]?.id || ''); }, []);
   useEffect(() => { if (data) { try { localStorage.setItem('veil-workspace-v1', JSON.stringify(exportData(data))); } catch { setMessage('Speicher voll oder nicht verfügbar. Bitte Daten exportieren.'); } document.documentElement.classList.toggle('dark', data.theme === 'dark'); } }, [data]);
-  useEffect(() => { setAddress(active?.url || ''); setArticle(null); }, [active?.id, active?.url]);
+  useEffect(() => { setAddress(active?.url || ''); setArticle(null); setReaderInput(''); setDialog(null); }, [active?.id, active?.url]);
   useEffect(() => { if (!message) return; const timer = setTimeout(() => setMessage(''), 6000); return () => clearTimeout(timer); }, [message]);
   const update = (fn: (current: BrowserData) => BrowserData) => setData(current => current ? fn(current) : current);
   function openTab(isPrivate = false) { const tab = newTab(isPrivate); update(d => ({ ...d, tabs: [...d.tabs, tab] })); setActiveId(tab.id); setView('home'); setSidebar(false); }
