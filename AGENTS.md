@@ -13,3 +13,5 @@
 - Keep the web workspace independent of the Android repositories; browser UI changes must not modify their branches.
 - Keep browser workspace data on the device and exclude private tabs from storage, history and exports; browsing data is not a cloud-sync product.
 - Use a browser-safe model for validated imports and navigation; external sites run in sandboxed frames and reader extraction uses user-provided HTML because same-origin restrictions cannot be bypassed.
+- Keep Android web packaging isolated in android-packaging with disposable builds under /tmp; copy the client-only workspace rather than replacing TanStack Start or changing existing Android repositories.
+- Android web packages use a stable HTTPS local origin, native share-sheet exports and disabled cloud/device-transfer backup so workspace persistence stays device-local; preserve the iframe sandbox and private-data model.
