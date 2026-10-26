@@ -5,6 +5,7 @@
 - [x] GeckoView Phase 1 – Engine und angebundene Funktionen übertragen
 - [x] Android-Build auf dem eigenen Zweig prüfen
 - [ ] Phase 1 auf einem echten Android-Gerät testen – wartet auf den Nutzer
-- [ ] GeckoView Phase 2 – Werbe-, Tracker- und Cookie-Banner-Schutz im Zweig geckoview migrieren
-- [ ] Phase-2-Tests und Android-Build auf GitHub prüfen; main unverändert bestätigen
-- [ ] Konkrete Android-Geräte-Testcheckliste für Browser-Grundfunktionen und Datenschutz erstellen
+- [x] GeckoView Phase 2 – Werbe-, Tracker- und Cookie-Banner-Schutz im Zweig geckoview migrieren
+- [x] Phase-2-Tests und Android-Build auf GitHub prüfen; main unverändert bestätigen (Commit baf5bef, Lauf 40388968216)
+- [x] Konkrete Android-Geräte-Testcheckliste für Browser-Grundfunktionen und Datenschutz erstellen
+- [ ] Phase 2 auf einem echten Android-Gerät testen – wartet auf Gerätetests des Nutzers; Filterwirkung, Ausnahmen und Cookie-Ablehnung noch nicht am Gerät verifiziert
