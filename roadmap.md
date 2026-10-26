@@ -16,3 +16,4 @@
 - [x] Phase-4-Tests und Android-Build geprüft: Commit 079aacc9b75da8837f39468bc87b875836952381, Lauf 40393877360 erfolgreich; 20 JVM- und 10 JavaScript-Tests bestanden; main unverändert auf 16687d170b2d9c173cad4e05c775257bb1bb6a15
 - [ ] Phase 4 auf Android-Gerät prüfen – wartet auf Gerätetests des Nutzers: Keystore/Logins, System- und Medienrechte, DNS-Netzwerkwege, Reader-Erweiterung, Übersetzungsmodelle und PDF; GeckoView 139 nicht veröffentlichen
 - [x] Konkrete Phase-4-Android-Geräte-Testcheckliste mit 87 Testfällen, Soll-Ergebnissen und Datenschutzprüfungen erstellen
+- [x] Priorisierten Phase-4-Testablauf mit ausfüllbarem Protokoll (MD + CSV) erstellen
