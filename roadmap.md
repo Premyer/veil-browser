@@ -9,5 +9,6 @@
 - [x] Phase-2-Tests und Android-Build auf GitHub prüfen; main unverändert bestätigen (Commit baf5bef, Lauf 40388968216)
 - [x] Konkrete Android-Geräte-Testcheckliste für Browser-Grundfunktionen und Datenschutz erstellen
 - [ ] Phase 2 auf einem echten Android-Gerät testen – wartet auf Gerätetests des Nutzers; Filterwirkung, Ausnahmen und Cookie-Ablehnung noch nicht am Gerät verifiziert
-- [ ] Phase 3 – uBlock Origin im Zweig geckoview installieren und anbinden, main unverändert lassen
-- [ ] Phase-3-Tests und Android-Build prüfen
+- [x] Phase 3 – uBlock Origin im Zweig geckoview installieren und anbinden, main unverändert lassen
+- [x] Phase-3-Tests und Android-Build prüfen (Commit 7ec107c, Lauf 40391330066; 14 JVM- und 6 Filtertests bestanden)
+- [ ] Phase 3 am Android-Gerät prüfen – wartet auf Nutzer: Laufzeitinstallation, Popup, Dashboard, private Filterwirkung und Updates; Engine 139 weiterhin nicht veröffentlichen
