@@ -17,3 +17,5 @@
 - [ ] Phase 4 auf Android-Gerät prüfen – wartet auf Gerätetests des Nutzers: Keystore/Logins, System- und Medienrechte, DNS-Netzwerkwege, Reader-Erweiterung, Übersetzungsmodelle und PDF; GeckoView 139 nicht veröffentlichen
 - [x] Konkrete Phase-4-Android-Geräte-Testcheckliste mit 87 Testfällen, Soll-Ergebnissen und Datenschutzprüfungen erstellen
 - [x] Priorisierten Phase-4-Testablauf mit ausfüllbarem Protokoll (MD + CSV) erstellen
+- [x] Veil-Weboberfläche: Tabs, Ordner, Verlauf, privater Modus, Lesemodus, Suche, Themes, Tastenkürzel, Notizen und Datentransfer
+- [x] Web-Funktionen und Datenschutzregeln prüfen — 7 Tests bestanden; Lesezeichen/Ordner, Notizen nach Neustart, privater Verlauf, Suche, Themes, JSON-Transfer, Lesemodus und Tastenkürzel im Browser geprüft; Desktop und Mobilansicht ohne Überlauf
