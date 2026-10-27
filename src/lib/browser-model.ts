@@ -11,16 +11,29 @@ export function exportData(data: BrowserData): BrowserData { return { ...data, t
 export function addVisit(history: Visit[], tab: Tab): Visit[] { if (tab.private || !tab.url) return history; return [{ id: crypto.randomUUID(), title: tab.title, url: tab.url, time: Date.now() }, ...history].slice(0, 1000); }
 export function initialData(): BrowserData { return { version: 1, folders: ['Favoriten', 'Arbeit', 'Inspiration'], bookmarks: [ { id: 'mozilla', title: 'Mozilla', url: 'https://www.mozilla.org/', folder: 'Favoriten' }, { id: 'wiki', title: 'Wikipedia', url: 'https://de.wikipedia.org/', folder: 'Favoriten' }, { id: 'github', title: 'GitHub', url: 'https://github.com/', folder: 'Arbeit' }, { id: 'mdn', title: 'MDN Web Docs', url: 'https://developer.mozilla.org/', folder: 'Arbeit' } ], history: [], notes: [], engine: 'DuckDuckGo', theme: 'light', tabs: [newTab()] }; }
 export function parseImport(input: unknown): BrowserData {
-  if (!input || typeof input !== 'object') throw new Error('Ungültige Datendatei.');
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Ungültige Datendatei.');
   const raw = input as Record<string, unknown>;
-  if (raw['version'] !== 1 || !Array.isArray(raw['bookmarks']) || !Array.isArray(raw['folders']) || !Array.isArray(raw['history']) || !Array.isArray(raw['notes']) || !Array.isArray(raw['tabs'])) throw new Error('Keine gültige Veil-Sicherung.');
+  const rawFolders = raw['folders'];
+  const rawBookmarks = raw['bookmarks'];
+  const rawHistory = raw['history'];
+  const rawNotes = raw['notes'];
+  const rawTabs = raw['tabs'];
+  if (raw['version'] !== 1 || !Array.isArray(rawFolders) || !Array.isArray(rawBookmarks) || !Array.isArray(rawHistory) || !Array.isArray(rawNotes) || !Array.isArray(rawTabs)) throw new Error('Keine gültige Veil-Sicherung.');
+  const limits = { folders: 500, bookmarks: 5000, notes: 5000, tabs: 100 } as const;
+  const checkLimit = (items: unknown[], label: string, limit: number) => { if (items.length > limit) throw new Error('Zu viele ' + label + ' in der Sicherung (maximal ' + limit + ').'); };
+  checkLimit(rawFolders, 'Ordner', limits.folders);
+  checkLimit(rawBookmarks, 'Lesezeichen', limits.bookmarks);
+  checkLimit(rawNotes, 'Notizen', limits.notes);
+  checkLimit(rawTabs, 'Tabs', limits.tabs);
+  const record = (value: unknown, label: string): Record<string, unknown> => { if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(label + ' in der Sicherung.'); return value as Record<string, unknown>; };
   const text = (v: unknown): string => { if (typeof v !== 'string' || v.length > 200000) throw new Error('Ungültiger Text.'); return v; };
   const url = (v: unknown) => { const result = safeUrl(text(v)); if (!result) throw new Error('Unsichere Adresse in der Sicherung.'); return result; };
-  const folders = raw['folders'].map(text);
-  const bookmarks = raw['bookmarks'].map((b) => ({ id: crypto.randomUUID(), title: text(b.title), url: url(b.url), folder: text(b.folder) }));
+  const folders = [...new Set(rawFolders.map(v => text(v)))];
+  const bookmarks = rawBookmarks.map((value) => { const b = record(value, 'Ungültiges Lesezeichen'); return { id: crypto.randomUUID(), title: text(b['title']), url: url(b['url']), folder: text(b['folder']) }; });
   bookmarks.forEach(b => { if (!folders.includes(b.folder)) folders.push(b.folder); });
-  const history = raw['history'].slice(0, 1000).map(h => ({ id: crypto.randomUUID(), title: text(h.title), url: url(h.url), time: Number.isFinite(h.time) ? h.time : 0 }));
-  const notes = raw['notes'].map(n => ({ id: crypto.randomUUID(), title: text(n.title), body: text(n.body), updated: Number.isFinite(n.updated) ? n.updated : 0 }));
-  const tabs = raw['tabs'].filter(t => t.private === false).map(t => { const address = t.url ? url(t.url) : ''; return { ...newTab(), title: text(t.title), url: address, trail: [address] }; });
+  checkLimit(folders, 'Ordner', limits.folders);
+  const history = rawHistory.slice(0, 1000).map((value) => { const h = record(value, 'Ungültiger Verlaufseintrag'); return { id: crypto.randomUUID(), title: text(h['title']), url: url(h['url']), time: Number.isFinite(h['time']) ? h['time'] as number : 0 }; });
+  const notes = rawNotes.map((value) => { const n = record(value, 'Ungültige Notiz'); return { id: crypto.randomUUID(), title: text(n['title']), body: text(n['body']), updated: Number.isFinite(n['updated']) ? n['updated'] as number : 0 }; });
+  const tabs = rawTabs.flatMap((value) => { const t = record(value, 'Ungültiger Tab'); if (typeof t['private'] !== 'boolean') throw new Error('Ungültiger Tab in der Sicherung.'); if (t['private']) return []; const address = t['url'] === '' ? '' : url(t['url']); return [{ ...newTab(), title: text(t['title']), url: address, trail: [address] }]; });
   return { version: 1, folders, bookmarks, history, notes, tabs: tabs.length ? tabs : [newTab()], engine: typeof raw['engine'] === 'string' && raw['engine'] in engines ? raw['engine'] : 'DuckDuckGo', theme: raw['theme'] === 'dark' ? 'dark' : 'light' };
 }
