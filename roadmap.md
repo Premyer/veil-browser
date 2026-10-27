@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Vorbereitete Firefox-ähnliche Android-Einstellungen im Zweig geckoview fertigstellen; APK-Bau prüfen und main unverändert bestätigen
 - [x] Vergleichsliste Veil vs. Firefox
 - [x] Priorisierte Roadmap für GeckoView-Umstellung (Dokument)
 - [x] GeckoView Phase 0 – eigenen Zweig und Abhängigkeit vorbereiten
