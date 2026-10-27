@@ -9,7 +9,7 @@ describe('Browser privacy and data', () => {
   it('uses selected search engine and allows HTTPS addresses', () => { expect(resolveAddress('rote Füchse', 'Ecosia')).toBe('https://www.ecosia.org/search?q=rote%20F%C3%BCchse'); expect(resolveAddress('example.com', 'Google')).toBe('https://example.com/'); });
   it('rejects malformed backup records with clear errors', () => {
     const data = initialData();
-    expect(() => parseImport({ ...data, bookmarks: [null] })).toThrow('Ungültiger Lesezeichen in der Sicherung.');
+    expect(() => parseImport({ ...data, bookmarks: [null] })).toThrow('Ungültiges Lesezeichen in der Sicherung.');
     expect(() => parseImport({ ...data, history: [null] })).toThrow('Ungültiger Verlaufseintrag in der Sicherung.');
     expect(() => parseImport({ ...data, notes: [null] })).toThrow('Ungültiger Notiz in der Sicherung.');
     expect(() => parseImport({ ...data, tabs: [null] })).toThrow('Ungültiger Tab in der Sicherung.');
