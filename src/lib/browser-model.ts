@@ -25,15 +25,15 @@ export function parseImport(input: unknown): BrowserData {
   checkLimit(rawBookmarks, 'Lesezeichen', limits.bookmarks);
   checkLimit(rawNotes, 'Notizen', limits.notes);
   checkLimit(rawTabs, 'Tabs', limits.tabs);
-  const record = (value: unknown, label: string): Record<string, unknown> => { if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Ungültiger ' + label + ' in der Sicherung.'); return value as Record<string, unknown>; };
+  const record = (value: unknown, label: string): Record<string, unknown> => { if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(label + ' in der Sicherung.'); return value as Record<string, unknown>; };
   const text = (v: unknown): string => { if (typeof v !== 'string' || v.length > 200000) throw new Error('Ungültiger Text.'); return v; };
   const url = (v: unknown) => { const result = safeUrl(text(v)); if (!result) throw new Error('Unsichere Adresse in der Sicherung.'); return result; };
   const folders = [...new Set(rawFolders.map(v => text(v)))];
-  const bookmarks = rawBookmarks.map((value) => { const b = record(value, 'Lesezeichen'); return { id: crypto.randomUUID(), title: text(b['title']), url: url(b['url']), folder: text(b['folder']) }; });
+  const bookmarks = rawBookmarks.map((value) => { const b = record(value, 'Ungültiges Lesezeichen'); return { id: crypto.randomUUID(), title: text(b['title']), url: url(b['url']), folder: text(b['folder']) }; });
   bookmarks.forEach(b => { if (!folders.includes(b.folder)) folders.push(b.folder); });
   checkLimit(folders, 'Ordner', limits.folders);
-  const history = rawHistory.slice(0, 1000).map((value) => { const h = record(value, 'Verlaufseintrag'); return { id: crypto.randomUUID(), title: text(h['title']), url: url(h['url']), time: Number.isFinite(h['time']) ? h['time'] as number : 0 }; });
-  const notes = rawNotes.map((value) => { const n = record(value, 'Notiz'); return { id: crypto.randomUUID(), title: text(n['title']), body: text(n['body']), updated: Number.isFinite(n['updated']) ? n['updated'] as number : 0 }; });
-  const tabs = rawTabs.flatMap((value) => { const t = record(value, 'Tab'); if (typeof t['private'] !== 'boolean') throw new Error('Ungültiger Tab in der Sicherung.'); if (t['private']) return []; const address = t['url'] === '' ? '' : url(t['url']); return [{ ...newTab(), title: text(t['title']), url: address, trail: [address] }]; });
+  const history = rawHistory.slice(0, 1000).map((value) => { const h = record(value, 'Ungültiger Verlaufseintrag'); return { id: crypto.randomUUID(), title: text(h['title']), url: url(h['url']), time: Number.isFinite(h['time']) ? h['time'] as number : 0 }; });
+  const notes = rawNotes.map((value) => { const n = record(value, 'Ungültige Notiz'); return { id: crypto.randomUUID(), title: text(n['title']), body: text(n['body']), updated: Number.isFinite(n['updated']) ? n['updated'] as number : 0 }; });
+  const tabs = rawTabs.flatMap((value) => { const t = record(value, 'Ungültiger Tab'); if (typeof t['private'] !== 'boolean') throw new Error('Ungültiger Tab in der Sicherung.'); if (t['private']) return []; const address = t['url'] === '' ? '' : url(t['url']); return [{ ...newTab(), title: text(t['title']), url: address, trail: [address] }]; });
   return { version: 1, folders, bookmarks, history, notes, tabs: tabs.length ? tabs : [newTab()], engine: typeof raw['engine'] === 'string' && raw['engine'] in engines ? raw['engine'] : 'DuckDuckGo', theme: raw['theme'] === 'dark' ? 'dark' : 'light' };
 }
