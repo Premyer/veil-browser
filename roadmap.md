@@ -24,4 +24,4 @@
 - [x] Konkrete Android-Geräte-Testcheckliste für die aktuelle Web-Version erstellt: 37 Fälle mit Soll-Ergebnissen und CSV-Protokoll
 - [ ] Veil-Web-APK auf Android-Gerät testen – wartet auf Nutzer: Installation, native Dateiauswahl/Teilen, externes Öffnen und Backup-/Übertragungsprüfung; mobile Oberfläche bisher nur in Chromium geprüft
 - [x] Veralteten Webpack-Workflow entfernen
-- [ ] Android-Workflow mit Versions-Tag testen (Release-Asset)
+- [ ] Android-Workflow mit Versions-Tag testen (Fehler behoben; Tag v0.1.0 nach Synchronisierung setzen)
