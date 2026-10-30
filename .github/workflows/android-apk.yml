@@ -19,10 +19,10 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      # The default package list includes the removed 'tools' package and fails.
       - uses: android-actions/setup-android@v3
-
-      - name: Android SDK-Pakete
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
 
       - uses: gradle/actions/setup-gradle@v4
         with:
