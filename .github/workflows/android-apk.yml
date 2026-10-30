@@ -1,0 +1,57 @@
+name: Android APK bauen
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Android SDK-Pakete
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.14.3
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Verpackung vorbereiten
+        run: python3 android-packaging/prepare.py
+
+      - name: Web-Oberfläche bauen und Android-Projekt erzeugen
+        working-directory: /tmp/veil-web-android
+        run: |
+          bun install --frozen-lockfile
+          bun node_modules/vite/bin/vite.js build
+          bun node_modules/@capacitor/cli/bin/capacitor add android
+
+      - name: Datenschutz-Härtung
+        run: python3 android-packaging/harden.py /tmp/veil-web-android
+
+      - name: APK bauen
+        working-directory: /tmp/veil-web-android
+        run: gradle -p android assembleDebug --no-daemon
+
+      - name: Signatur prüfen
+        run: |
+          APK=/tmp/veil-web-android/android/app/build/outputs/apk/debug/app-debug.apk
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose "$APK"
+          cp "$APK" "$GITHUB_WORKSPACE/Veil_Web_Android_Debug.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: veil-web-android-debug-${{ github.sha }}
+          path: Veil_Web_Android_Debug.apk
+          retention-days: 30
