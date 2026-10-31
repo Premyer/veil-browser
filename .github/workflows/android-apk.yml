@@ -48,20 +48,26 @@ jobs:
         run: gradle -p android assembleDebug --no-daemon
 
       - name: Signatur prüfen
+        id: verified_apk
         run: |
           APK=/tmp/veil-web-android/android/app/build/outputs/apk/debug/app-debug.apk
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose "$APK"
           cp "$APK" "$GITHUB_WORKSPACE/Veil_Web_Android_Debug.apk"
 
       - uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
           name: veil-web-android-debug-${{ github.sha }}
           path: Veil_Web_Android_Debug.apk
           retention-days: 30
 
       - name: Als GitHub-Release veröffentlichen
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: ${{ success() && startsWith(github.ref, 'refs/tags/v') && steps.verified_apk.outcome == 'success' }}
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref_name }}
           files: Veil_Web_Android_Debug.apk
+          fail_on_unmatched_files: true
+          draft: false
           generate_release_notes: true
